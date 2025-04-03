@@ -1,0 +1,35 @@
+Main motive of DevOps team -> Speed up the task
+
+What is Docker? Infrastructure provision tool
+Containerization vs Virtualization
+
+- In comparison to the traditional virtualization functionalities of hypervisors,
+- Docker container eliminate the need for a separate guest os for rvrry new virtual machine
+
+Virtualization needs a Guest OS, You can not create directly
+the application as an vm, for running app you need Guest OS
+- There is fixed hardware allocation (RAM, CPU, HArdDisk)
+
+Containerization eliminated the needs of guest OS
+- Performance is increase
+- Dynamic Hardware assigned (their is no fixed hardware allocation)
+- Docker runs on the process isolation - isolated container there is no depencese on the OS
+- Docker implement a high-level API to provide lightweight container that run processes in isolation
+- A Docker container enables rapid deployment with minimum run-tim requirements. It also ensure better maagement and simplefied portability.
+- That helps developers and oprtations team in rapid deplyment of an application.
+    - 
+
+Advantages of Containerization
+Installing Docker -> get.docker.com
+Docker Terminologies
+    - Docker Images
+        - Combination of binaries /libraries which are necessary for one software application
+    - Docker Container
+        - When image is installed and in come into running condition, it is called container 
+    - Docker Host
+        - Where we installed the Docker its called docker host (Like in our local machine, cloud virtual machine, vmware machine etc...)
+    - Docker Client
+        - Where we run the docker commands its called an docker client (ex- gitbash, powershell, cmd etc...)
+
+docker exec -it my_ubuntu 
+$ curl -fsSL https://get.docker.com -o install-docker.sh

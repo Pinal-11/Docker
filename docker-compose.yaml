@@ -1,0 +1,30 @@
+---
+version: '3.8'
+networks:
+  MyNetwork:
+    name: MyNetwork
+    driver: bridge
+
+services:
+  Selenium:
+    image: selenium/hub
+    container_name: SeleniumDC
+    ports:
+      - 4442:4444
+    networks:
+      - MyNetwork
+  Chrom:
+    image: selenium/node-chrome-debug
+    container_name: ChromNodeDC
+    ports:
+      - 5901:5900
+    networks:
+      - MyNetwork
+  firefox:
+    image: selenium/node-firefox-debug
+    container_name: FirefoxNodeDC
+    ports:
+      - 5902:5900
+    networks:
+      - MyNetwork
+...

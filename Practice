@@ -1,0 +1,177 @@
+$ docker pull tomee
+If you do not specify version, be default, we get latest version
+
+=========================================================================================================================
+Basics
+
+To create a container from an image
+$ dokcer run image_name
+
+$ docker run --name containe_name -p Dockerhostport:defaultport image_name
+
+$ docker run --name MyTomcat -p 7070:8080 tomee 
+(here tomcat by default run on the 8080 port but we change the port mapping to the docker host 7070)
+after running this command i am unable get the # prompt, so for that run the container again in the detach mode
+run the container in detach mode you cannot get the log messages
+$ docker run --name MyTomcat -p 7070:8080 -d tomee 
+
+Now i want to run the jenkins container
+$ docker run --name Jenkins -p 9090:8080 -d jenkins/jenkins
+
+Create the ubuntu container with interactive mode, control will go to the ubuntu level
+$ docker run --name MyUbuntu -it ubuntu
+
+=========================================================================================================================
+Scenario -1
+Start tomcat as a container and name it as "webserver". perform port mapping and run this container in detached mode
+
+$ docker pull tomee
+$ docker run --name webserver -p 7070:8080 -d tomee
+
+=========================================================================================================================
+Scenario -2
+Start Jenkins as a container in detached mode, name it as devserver, perform port mapping
+
+$ docker pull jenkins/jenkins
+$ docket run --name devserver -p 9090:8080 -d jenkins/jenskins
+
+I want to get the password from the /var/jenkins_home/secrets/initialAdminPassword location
+$ docker exec -it <container_name/id> <one more variable like sh, bash, cat anything>
+$ docker exec -it devserver cat /var/jenkins_home/secrets/initialAdminPassword 
+
+=========================================================================================================================
+Scenario -3
+Start nginx as a container and name as "appserver", run in the detached mode, perform automatic port mapping
+
+$ docker pull nginx
+$ docker run --name appserver -P -d nginx
+
+To view the which port is assign
+$ docket port container_name/id
+$ docker port appserver 
+
+=========================================================================================================================
+Scenario -4
+Create centos container in interactive mode
+
+$ docker pull centos/systemd
+$ docker run --name MyCentos -it centos/systemd
+
+=========================================================================================================================
+Scenario -5
+Start MySql as container with interactive terminal, create a sample table 
+
+-e => environment variable
+mysql:8 => 8 is supportive tag, image version
+
+$ docker pull mysql:8
+$ docker run --name mydb -d -e MYSQL_ROOT_PASSWORD=pinal mysql:8
+
+I want to open bash terminal of mysql
+$ docker exec -it <containerName> <terminalName bash, sh>
+$ docker exec -it mydb bash
+
+To connect to mysql databse
+$ mysql -u root -p
+
+To see list of all dbs
+show databases;
+
+To enter into that db
+use db_name;
+
+To view all tables
+show tables;
+
+to view all entries in the tables;
+select * from user
+
+=========================================================================================================================
+Scenario -6
+
+Multi container (linking beetwen the containers)
+- Create a container and link with them its called multi container architecture
+This can be done in 2 ways
+1. --link
+2. docker-compose
+
+========================================================================================================================
+1. --link method
+--link to-connect-container-name:linkname
+Use case
+ => start  two busybox container and create link between them
+ what is **busybox** -> busybox is a software suite that provides several **Unix** utilities in a single executable file
+
+create 1st busy box container
+$ docker run --name c1 -it busybox
+
+create 2nd containet busybox with link
+$ docker run --name <c_name> --link <to-connect-c_name>:<Link-name> -it busybox
+$ docker run --name c2 --link c1:c1-alias -it busybox
+
+**how-to-comeout-from-the-container-without-stop**
+exit => you comeout from the container but container will stop
+ctrl+p+q => if you want to run the container in the backgroud then use 
+
+====================================================================================================================
+
+Example-1 create development environment using docker
+start mysql as container and link it with wordpress container.
+Developer should be able to create wordpress website 
+    1. start the mysql container
+    $ docker run --run mydb -d -e MYSQL_ROOT_PASSWORD=pinal mysql:8
+
+    2. Start the wordpress container
+    $ docker run --name mysite -d -p 5050:80 --link mydb:mysql wordpress:beta-php8.4-fpm
+
+====================================================================================================================
+
+Example-2 Create a LAMP architect using docker
+L -> Linux
+A -> Apache Tomcat
+M -> mysql
+P -> Php
+
+    Here Linux is the container host
+    To start Mysql container
+    $ docker run --name mydb -d -e MYSQL_ROOT_PASSWORD=pinal mysql:8
+
+    To start apache tomcat container
+    $ docker run --name apache -d -p 6060:8080 --link mydb:mySql tomee
+
+    To start php as a container
+    $ docker run --name php -d --link mydb:mydql --link apache:tomcat php
+
+To want to know more information about the container
+docker inspect <container_name>
+$ docker inspect php
+
+====================================================================================================================
+
+Example-3 Create CI-CD environment , where jenkins container is linked with two tomcat containers.
+
+    To start jenkins server as a jenkins
+    $ docker run --name devserver -p 9090:8080 jenkins
+
+    Now we need to tomcat container for QA and Prod
+    $ docker run --name  QAServer -d -p 7070:8080 --link devserver:QA-link tomee
+    $ docker run --name ProdServer -d -p 6060:8080 --link devserver:Prod-link tomee
+
+====================================================================================================================
+
+Example-4 Create a test environment using the docker
+
+create selenium hub container, and link it with two node containers
+one node with firefox installed, another node with chrom is installed
+
+Tester should be able to run the selenium automation program for testing the application on multiple browser.
+
+run the selenium/hub as a container
+$ doscer run --name Selenium -d -p 4444:4444 selenium/hub
+
+run the chrom as a container and link with selenium container
+$ docker run --name selenium-chrom-node -d -p 5902:5900 --link Selenium:chrom-node selenium/node-chrome
+
+
+run the firefox as a container and link with selenium container
+$ doker run --name selenium-firefox-node -d -p 5901:5900 --link Selenium:chrom-node selenium/node-firefox-debug

@@ -1,0 +1,147 @@
+Install Docker compose
+To verify the docker compose
+$ docker-compose version
+
+docker dompose name must be ==> docker.compose.yaml
+
+How to start the services from dockerfile with detach mode
+$ docker-compose up
+
+=======================================================================================================
+Example - 1
+Create a docker compose file for setting up test environmnet.
+mysql container linked with wordpress container.
+
+---
+version: '3'
+services:
+  mydbdc:
+    image: mysql:8
+    container_name: mydbdcc
+    environment:
+      MYSQL_ROOT_PASSWORD: pinal
+    
+  mysitedc:
+    image: wordpress
+    container_name: mysitedcc
+    ports:
+     - 5050:80
+    links:
+     - mydbdc:mysql
+...
+
+======================================================================================================
+Ex=2 Create a docker-compose file for LAMP architecture
+Apache Tomcat, MySQL, PHP
+Here i have uused the docker network concept instead of link
+
+---
+version: '3.8'
+networks:
+    Mynet:
+      driver: bridge
+services:
+  mysqldb:
+    image: mysql:8
+    container_name: mysqldb
+    environment:
+      MYSQL_ROOT_PASSWORD: pinal
+    networks:
+      - Mynet
+  
+  apachetomcat:
+    image: tomee
+    container_name: apachetomcat
+    ports:
+      - 1010:8080
+    networks:
+      - Mynet
+#    links:
+#      - mysqldb:MySQLDBs
+
+  phps:
+    image: php:apache
+    container_name: phps
+    networks:
+      - Mynet
+#    links:
+#      - mysqldb:MySQLDBs
+#      - apachetomcat:tomcatServer
+...
+
+# ==============================================================================================
+#
+#Ex-3 Docker compose file for setting up the CI-CD Environment
+# Jenkins container linked with two tomcat container.
+
+---
+version: "3.8"
+
+networks:
+  Mynet:  # Define network correctly
+    name: MyNet # Network name
+    driver: bridge
+    
+
+services:
+  Jenkins:
+    image: jenkins/jenkins
+    container_name: JenkinsDev
+    ports:
+      - 1010:8080
+    networks:
+      - Mynet  #  Use the defined network
+
+  TomcatQA:
+    image: tomee
+    container_name: TomcatQA
+    ports:
+      - 2020:8080
+    networks:
+      - Mynet  #  Same network
+
+  TomcatProd:
+    image: tomee
+    container_name: TomcatProd
+    ports:
+      - 3030:8080
+    networks:
+      - Mynet  #  Same network
+
+...
+
+# =============================================================================================
+EX-4 Docker-compose file to setup testing environment
+selenium hub container is linked with two node containers
+chrom-debug and firefox-debug
+
+---
+version: '3.8'
+networks:
+  MyNetwork:
+    name: MyNetwork
+    driver: bridge
+
+services:
+  Selenium:
+    image: selenium/hub
+    container_name: SeleniumDC
+    ports:
+      - 4442:4444
+    networks:
+      - MyNetwork
+  Chrom:
+    image: selenium/node-chrome-debug
+    container_name: ChromNodeDC
+    ports:
+      - 5901:5900
+    networks:
+      - MyNetwork
+  firefox:
+    image: selenium/node-firefox-debug
+    container_name: FirefoxNodeDC
+    ports:
+      - 5902:5900
+    networks:
+      - MyNetwork
+...

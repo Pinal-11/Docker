@@ -1,0 +1,32 @@
+Flags that are use in the Docker run commands
+
+====================================================================================
+
+To create a container from an image
+$ docker run image_name 
+
+====================================================================================
+-it => for opening an interactive terminal in a docker
+
+--name => used for giving a name to a container
+
+-d => Used for a running a container in detached mode as a backgroud process
+
+-e => Used for passing environment variables to the container
+
+-p => used for mapping between port of container with the dockerhost port
+
+-P => Used for automatic port mapping 
+        ie: it will map internal port of the container with some port on host machine
+        This host port will be some number greater than 30000
+
+-v => Used for attaching a volume to the container
+
+--volume-from => Used for sharing volume between containers
+
+--network => Used to run container on a specific network
+
+--link => Used for linking the container for creating a multi container architecture
+
+--memory => Used for specify the maximum amount of ram that the container can use
+
