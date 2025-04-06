@@ -1,0 +1,54 @@
+Dokcer Volume
+
+Dokcer container are ephemeral(temporary)
+Where as the data processed by the container should be permanent
+
+Generally, when a container is deleted all its data will be lost
+To preserve the data, even after deleting the container, we use volume.
+
+Volume are of two types
+1. Simple Docker Volume
+2. Docker Volume Containers (Sharable volume)
+
+===========================================================================================
+1. Simple Docker Volume
+ - These volumes are used only when we want to acccess the data, 
+   even after the container is deleted.
+   But this data cannot be shared with other containers.
+
+USECASE
+---------------
+1.  Create a directory called /data, in our docker host machine
+    start centos as container and mount /data as volume
+    Create files in mounted volume in centos container,
+    exit from container and delete the container. 
+    check if the files are still available.
+
+Lets create a file
+$ mkdir data
+$ docker run --name vubuntu -it -v /data ubuntu
+
+$ docker inspect vubuntu
+mount path -> /var/lib/docker/volumes/0f0895d5dd195aa37c0f2b89f9b85002342ab7f70d7d5fbd1ff2a4eb33f8c997/_data
+
+===========================================================================================
+
+2. Docker Volume container (Sharable Volume)
+
+These are also known as reusable volume
+The Volume used by one container can be shared with other containers
+Even if all the containers are deleted. data will still be available on the docker host.
+
+Example
+Create a 1st container with /data directory and create the files inside the /data
+$ docker run --name c1 -it -v /data ubuntu
+For create a files inside the /data
+$ cd data
+$ touch fil01 fil02
+
+Create 2nd container, and C2 container must use the /data volume from the C1 container
+$ docker run --name c2 -it --volumes-from c1 ubuntu
+
+/var/lib/docker/volumes/9e39ab3385e1cd78f51dbfd0a39da4ef1f1561cafef645537aa3e53972e4aab6/_data
+
+==============================================================================================================

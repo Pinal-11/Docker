@@ -1,0 +1,26 @@
+---
+#Shared Volume example
+#version: '3.8'
+volumes:
+  shared_data:
+services:
+  c1:
+    container_name: c1
+    image: ubuntu
+    volumes:
+      - shared_data:/dataas:rw
+    command: bash -c "touch /dataas/f1 /dataas/f2 && tail -f /dev/null"
+  
+  c2:
+    container_name: c2
+    image: ubuntu
+    depends_on:
+      - c1
+    volumes:
+      - shared_data:/dataas:rw
+    command: bash -c "touch /dataas/f4 dataas/f3 && tail -f /dev/null"
+...
+
+# touch /dataas/f1 etc. ensures files are created inside the shared volume.
+# tail -f /dev/null keeps the container running so you can inspect it.
+# depends_on ensures c1 runs before c2.

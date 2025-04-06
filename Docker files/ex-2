@@ -1,0 +1,3 @@
+FROM ubuntu
+LABEL maintainer="Pinal"
+CMD ["date"]

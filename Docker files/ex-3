@@ -1,0 +1,4 @@
+FROM ubuntu
+LABEL maintainer="Pinal"
+CMD ["date"]
+CMD ["ls","-la"]

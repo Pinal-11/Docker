@@ -1,0 +1,82 @@
+Customized Docker Images
+
+Whenever docker container is deleted, all the softwares that we have installed within the container will also be deleted.
+
+If we save container as a image , then we can preserve the softwares.
+This creation of customized docker image can be done in two ways.
+
+1) using Docker commit command
+2) using Docker file
+
+===========================================================================================================================
+Using Docker Commit
+example
+$ docker run --name c1 -it ubuntu
+Now update apt repo and install the git
+
+To save the container as a image(snapshot)
+$ docker commit <container_name> imagename
+$ docker commit c1 myubuntu
+
+Now create c2 from the myubuntu image
+$ docker run --name c2 -it myubuntu
+
+===========================================================================================================================
+Using Docker file
+This is simple text file, which uses predefinied keywords for creating customized docker image
+The Key words are used in docker file is case sensitive.
+
+1) FROM --> Used to specify the base image from which docker file has to be created.
+2) MAINTAINER --> This represent name of the organization or the author who created this docker file
+3) CMD --> This is used to specify the initial command that should be execute when the container starts.
+4) ENTRYPOINT --> Used to specify the default process that should be executed when container starts. It can also be used for accepting argument from the CMD instrument.
+5) RUN --> Used for running linux commands within the container. It is generally helpful for installing the software in the container
+6) USER --> Used to specify the default user who should login into container.
+7) WORKDIR --> Used to specify default working directory in the container
+8) COPY --> Copying the files from the host machine to the container
+9) ADD --> Used for copying files from host to container, it can also be used for downloading files from remote server.
+10) ENV --> USed for specifying the environment variable that should be passed to the container
+11) EXPOSE --> Used to specify the internal port of the container
+12) VOLUME --> Used to specify default volume that should be attached to the container
+13) LABEL --> Used for giving label to the container
+14) STOPSIGNAL --> Used to specify the key sequences that have to be passed in order to stop the container
+
+-----------------------------------------
+Ex-1 Create a dockerfile by talking nginx as a base image and specify the maintainer as Project. construct an image from the dockerfile.
+
+Name of the file anything 
+To build an image form the dockerfile
+
+$ docker build -f dockerfile.txt -t mynginx E:\DevOps\Docker
+
+( t stands for tag,
+  . stands for current working dir
+  mynginx is the new image name)
+
+-f dockerfile.txt → tells Docker which file to use as the Dockerfile.
+-t mynginx → gives your image the name "mynginx".
+E:\DevOps\Docker → is the build context (the folder with Dockerfile and other needed files).
+
+==============================================================================================
+EX-3
+In Docker file, We can have one CMD instruction
+If we give two CMD instruction, it executes the latest one
+lets try
+
+FROM ubuntu
+LABEL maintainer="Pinal"
+CMD ["date"]
+CMD ["ls","-la"]
+
+Output:- Obervation we only get the "ls -la" command output
+
+============================================================================================
+EX-4 In Ubuntu container i want to install git in it.
+
+FROM ubuntu
+LABEL maintainer="Pinal"
+RUN apt-get update && \
+    apt-get install -y git
+CMD ["git", "--version"]
+
+===========================================================================================
