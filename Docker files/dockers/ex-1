@@ -1,2 +1,10 @@
-FROM nginx
-MAINTAINER Project
+FROM ubuntu
+LABEL maintainer="Pinal"
+
+RUN apt-get update && \
+    apt-get install -y git &&\
+    apt-get install -y default-jdk && \
+    apt-get install -y tree
+
+ENTRYPOINT ["bash", "-c"]
+CMD ["git --version && java -version"]

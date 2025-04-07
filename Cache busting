@@ -1,0 +1,13 @@
+Cache Bustin DockerFile
+====================================
+
+Whenever an image is build from a dockerfile, docker reads its memory and checks which instructions were already executed. These steps will not be re-executed.
+
+It will execute only the latest instruction. This is a time saving mechanism provided by docker.
+but, the disadvantages is, we can end up installing software packages from a repository which is updated long time back
+
+Advantages :- Time saving mechanism
+DisAdvantages :- Lets say, you are running after 4 months, we are installing tree from apt which is updated long time back.
+
+To avoid this disadvantages cache busting 
+Note: cache busting is implememnt using the && symbol 

@@ -80,3 +80,6 @@ RUN apt-get update && \
 CMD ["git", "--version"]
 
 ===========================================================================================
+###########################################################################################
+Version controlling in in docker file
+Generally we never perfomed version controlling in the code because we are not the developers

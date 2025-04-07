@@ -1,0 +1,10 @@
+FROM ubuntu
+LABEL maintainer="Pinal"
+
+RUN apt-get update && \
+    apt-get install -y default-jdk && \
+    apt-get clea33n
+
+EXPOSE 4040
+ADD https://mirrors.jenkins.io/war-stable/latest/jenkins.war  /
+ENTRYPOINT [ "java", "-jar", "jenkins.war","--httpPort=9090" ]
