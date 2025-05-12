@@ -1,12 +1,12 @@
-Dokcer Volume
+docker Volume
 
-Dokcer container are ephemeral(temporary)
+Docker container are ephemeral(temporary)
 Where as the data processed by the container should be permanent
 
 Generally, when a container is deleted all its data will be lost
 To preserve the data, even after deleting the container, we use volume.
 
-Volume are of two types
+Volumes are of two types
 1. Simple Docker Volume
 2. Docker Volume Containers (Sharable volume)
 
@@ -18,7 +18,7 @@ Volume are of two types
 
 USECASE
 ---------------
-1.  Create a directory called /data, in our docker host machine
+1.  Create a directory called/data, in our docker host machine
     start centos as container and mount /data as volume
     Create files in mounted volume in centos container,
     exit from container and delete the container. 
