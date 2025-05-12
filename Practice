@@ -1,11 +1,11 @@
 $ docker pull tomee
-If you do not specify version, be default, we get latest version
+If you do not specify the version, by default, we get the latest version
 
 =========================================================================================================================
 Basics
 
 To create a container from an image
-$ dokcer run image_name
+$ docker run image_name
 
 $ docker run --name containe_name -p Dockerhostport:defaultport image_name
 
@@ -111,7 +111,7 @@ $ docker run --name c2 --link c1:c1-alias -it busybox
 
 **how-to-comeout-from-the-container-without-stop**
 exit => you comeout from the container but container will stop
-ctrl+p+q => if you want to run the container in the backgroud then use 
+ctrl+p+q => if you want to run the container in the background then use 
 
 ====================================================================================================================
 
@@ -167,11 +167,10 @@ one node with firefox installed, another node with chrom is installed
 Tester should be able to run the selenium automation program for testing the application on multiple browser.
 
 run the selenium/hub as a container
-$ doscer run --name Selenium -d -p 4444:4444 selenium/hub
+$ docker run --name Selenium -d -p 4444:4444 selenium/hub
 
 run the chrom as a container and link with selenium container
 $ docker run --name selenium-chrom-node -d -p 5902:5900 --link Selenium:chrom-node selenium/node-chrome
-
 
 run the firefox as a container and link with selenium container
 $ doker run --name selenium-firefox-node -d -p 5901:5900 --link Selenium:chrom-node selenium/node-firefox-debug
